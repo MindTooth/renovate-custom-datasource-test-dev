@@ -1,0 +1,123 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "enabledManagers": [
+    "custom.regex"
+  ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "managerFilePatterns": [
+        "/^unity-deps\\.txt$/"
+      ],
+      "matchStrings": [
+        "(?<depName>com\\.unity\\.[a-z]+)=(?<currentValue>[^\\s]+)"
+      ],
+      "datasourceTemplate": "unity3d-packages",
+      "versioningTemplate": "semver"
+    },
+    {
+      "customType": "regex",
+      "managerFilePatterns": [
+        "/^nextcloud-deps\\.txt$/"
+      ],
+      "matchStrings": [
+        "(?<depName>[a-z_]+)=(?<currentValue>[^\\s]+)"
+      ],
+      "datasourceTemplate": "nextcloud",
+      "versioningTemplate": "semver"
+    },
+    {
+      "customType": "regex",
+      "managerFilePatterns": [
+        "/^nuget-deps\\.txt$/",
+        "/^pulumi-deps\\.txt$/"
+      ],
+      "matchStrings": [
+        "(?<depName>[A-Za-z][A-Za-z0-9.]+)=(?<currentValue>[^\\s]+)"
+      ],
+      "datasourceTemplate": "nuget",
+      "versioningTemplate": "semver"
+    }
+  ],
+  "packageRules": [
+    {
+      "matchDatasources": [
+        "unity3d-packages"
+      ],
+      "groupName": "Unity package changelog comparison"
+    },
+    {
+      "matchPackageNames": [
+        "com.unity.inputsystem"
+      ],
+      "allowedVersions": "<=1.15.0"
+    },
+    {
+      "matchPackageNames": [
+        "com.unity.cinemachine"
+      ],
+      "allowedVersions": "<=3.1.2"
+    },
+    {
+      "matchDatasources": [
+        "nextcloud"
+      ],
+      "registryUrls": [
+        "https://apps.nextcloud.com/api/v1/platform/30.0.0/apps.json"
+      ],
+      "groupName": "Nextcloud app changelog comparison"
+    },
+    {
+      "matchDatasources": [
+        "nextcloud"
+      ],
+      "matchPackageNames": [
+        "calendar"
+      ],
+      "allowedVersions": "<=5.5.9"
+    },
+    {
+      "matchDatasources": [
+        "nextcloud"
+      ],
+      "matchPackageNames": [
+        "contacts"
+      ],
+      "allowedVersions": "<=7.3.9"
+    },
+    {
+      "matchDatasources": [
+        "nuget"
+      ],
+      "matchPackageNames": [
+        "NuGet.Common",
+        "NuGet.Configuration"
+      ],
+      "allowedVersions": "<=7.9.0"
+    },
+    {
+      "matchDatasources": [
+        "nuget"
+      ],
+      "matchPackageNames": [
+        "Pulumi"
+      ],
+      "allowedVersions": "<=3.114.0"
+    },
+    {
+      "matchDatasources": [
+        "nuget"
+      ],
+      "matchPackageNames": [
+        "Pulumi.Aws"
+      ],
+      "allowedVersions": "<=7.48.0"
+    }
+  ],
+  "automerge": false,
+  "extends": [
+    "group:nugetMonorepo",
+    "group:pulumi"
+  ],
+  "dependencyDashboard": true
+}
