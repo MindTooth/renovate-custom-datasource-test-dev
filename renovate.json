@@ -1,7 +1,8 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "enabledManagers": [
-    "custom.regex"
+    "custom.regex",
+    "dockerfile"
   ],
   "customManagers": [
     {
@@ -112,6 +113,18 @@
         "Pulumi.Aws"
       ],
       "allowedVersions": "<=7.48.0"
+    },
+    {
+      "description": "ORAS changelog control for oras-project/oras#2300: supply the missing image source metadata manually.",
+      "matchDatasources": [
+        "docker"
+      ],
+      "matchPackageNames": [
+        "ghcr.io/oras-project/oras"
+      ],
+      "sourceUrl": "https://github.com/oras-project/oras",
+      "allowedVersions": "<=1.3.0",
+      "pinDigests": false
     }
   ],
   "automerge": false,

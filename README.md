@@ -110,3 +110,32 @@ it as evidence of repeated embedded content. If the packages omit release
 notes, the PRs are still a control for built-in group preset matching, not a
 `perDependencyNotes` reproduction. The full #45867 implementation does not
 aggregate NuGet's package-level content into intermediate releases.
+
+## ORAS: explicit source URL for Docker release notes
+
+This control supports [oras-project/oras#2300](https://github.com/oras-project/oras/pull/2300).
+The root `Dockerfile` pins `ghcr.io/oras-project/oras:v1.2.3`. The Docker package
+rule caps updates at `v1.3.0` and manually supplies:
+
+```json
+"sourceUrl": "https://github.com/oras-project/oras"
+```
+
+Run the same Renovate runner used for the other fixtures after merging this
+fixture, or select its branch with the self-hosted `baseBranches` option. For an
+isolated run, set `enabledManagers` to `["dockerfile"]` in the runner config.
+The expected update is `v1.2.3` to `v1.3.0`; its PR body should contain the
+[ORAS v1.3.0 release notes](https://github.com/oras-project/oras/releases/tag/v1.3.0),
+including the `New Features` and `Bug Fixes` sections.
+
+For a negative control, remove only this package rule's `sourceUrl`, run again
+with a fresh Renovate cache, and compare the generated PR body. Restore it and
+repeat with another fresh cache. The positive control demonstrates changelog
+lookup when source metadata is supplied manually. It does not verify the OCI
+labels added by the upstream PR; that requires a newly built/published image
+and a run without this override.
+
+Validation: Renovate's config validator passed, and GitHub confirms that the
+v1.3.0 release has nonempty notes. End-to-end generation remains unverified:
+the execution environment's configured HTTP proxy refused connections during
+this test. Keep the starting version unchanged for repeatable comparisons.
